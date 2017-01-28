@@ -1,6 +1,6 @@
 SM-Tapu-RNGTool
 ====
-Creates and searchs the DB for estimating initial seed from first 8 clock hands.   
+Creates and searchs the DB for specifying initial seed from first 8 clock hands.   
 Outputs a list of IVs of pokemon generated from an initial seed.  
 
 This tool is usable in RNG for Tapu {Koko/Lele/Bulu/Fini}.  
@@ -57,7 +57,7 @@ $ ./list b98ab4f3
 ## Reference
 How to look on clock hands as 0-16 expression.  
 http://www.smogon.com/forums/threads/sfmt-rng-in-sun-moon.3591281/#post-7167880  
-Checking the some clock hands in save selecting (when select "Continue") is enough to estimate the initial seed.  
+Checking the some clock hands in save selecting (when select "Continue") is enough to specify the initial seed.  
 http://blastoise-x.hatenablog.com/entry/SM-RNG-abuse  
 The Scheme for deciding pokemon status  
 http://xxsakixx.com/archives/55579090.html  
@@ -67,4 +67,4 @@ https://github.com/Quandra/PokemonSunMoonRNGTool/tree/v2.00alpha
 I reccomend it if you want GUI Tool :)
 
 #Other
-- "tick" in source code means "clock hand"  
+- "tick" in source code or filename means "clock hand."  
