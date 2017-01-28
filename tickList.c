@@ -19,7 +19,6 @@ int main(int argc, char* argv[])
         uint32_t seed;
         
         sscanf(argv[1], "%x", &seed);
-        printf("%x, %u\n", seed, seed);
 
         sfmt_init_gen_rand(&sfmt, seed);
 
@@ -29,7 +28,7 @@ int main(int argc, char* argv[])
                 sfmt_genrand_uint64(&sfmt);
         }
 
-        for(int i=0; i<100; ++i)
+        for(int i=0; i<15; ++i)
         {
                 uint64_t result = sfmt_genrand_uint64(&sfmt);
                 printf("%c", numtoR17(result%17));
