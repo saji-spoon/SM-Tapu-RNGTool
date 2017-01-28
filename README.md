@@ -65,3 +65,6 @@ http://xxsakixx.com/archives/55579090.html
 Practical SM RNG Tool (for Egg, Tapu, Silvally, and more)  
 https://github.com/Quandra/PokemonSunMoonRNGTool/tree/v2.00alpha  
 I reccomend it if you want GUI Tool :)
+
+#Other
+- "tick" in source code means "clock hand"  
