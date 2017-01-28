@@ -11,7 +11,7 @@ It's not usable in Egg Hatching RNG.
 gcc (Ubuntu 4.9.2-10ubuntu13) 4.9.2
 
 ## Usage
-'''
+```
 $ make
 
 #Create DB.
@@ -45,4 +45,4 @@ $ ./tickList 24b9a52e
 $ ./list b98ab4f3
 #/lists/indivList.csv and /lists/list.csv are generated.
 #See indivList.csv for IVs of pokemons generated from the initial seed.
-'''
+```
