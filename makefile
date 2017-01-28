@@ -50,3 +50,4 @@ SFMT.o:SFMT/SFMT.c
 
 clean:
 	$(RM) *.o
+	$(RM) db-search db-create tickList list
