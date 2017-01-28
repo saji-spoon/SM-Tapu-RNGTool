@@ -8,7 +8,7 @@ This tool is usable in RNG for Tapu {Koko/Lele/Bulu/Fini}.
 It's not usable in Egg Hatching RNG.  
 
 ## Requirement  (Other environments aren't tested)
-Ubuntu 15.04
+Ubuntu 15.04  
 gcc (Ubuntu 4.9.2-10ubuntu13) 4.9.2  
 
 ## Usage
