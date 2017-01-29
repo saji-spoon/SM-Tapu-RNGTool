@@ -19,17 +19,21 @@ db-create:db-create.o
 
 tickList:tickList.o
 
-list:list.o
+list:list-entry.o
 	$(CXX) $^ -o $@
-        
+
+#Test Target
+test:test.o list.o RNGData.o SFMT.o
+	$(CXX) $^  -o $@
+
 #Who use util/tickSeed/SFMT
 db-create db-search: tickSeed.o
 
-test-tick10 db-create db-search tickList list:util.o
+test-tick10 db-create db-search tickList:util.o
 
 test-tick10 db-create tickList list:SFMT.o
 
-list:RNGData.o
+list:list.o RNGData.o
 
 #Header file
 util.o:util.h
@@ -39,6 +43,9 @@ tickSeed.o:tickSeed.h
 SFMT.o:SFMT/SFMT.h
 
 RNGData.o:RNGData.hpp
+
+list.o:list.hpp
+
 
 #Default compile(Use SFMT)
 %.o:%.c
@@ -61,4 +68,4 @@ SFMT.o:SFMT/SFMT.c
 
 clean:
 	$(RM) *.o
-	$(RM) db-search db-create tickList list
+	$(RM) db-search db-create tickList list test
