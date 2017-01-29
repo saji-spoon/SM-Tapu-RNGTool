@@ -57,7 +57,7 @@ int main(int argc,char *argv[])
         tsIdx = fread((void*)ts, sizeof(TickSeed), size, fp);
               
         clock_t end = clock();
-        printf("読み込み終了:%lf[s]\n", 1.0*(end-start)/CLOCKS_PER_SEC);
+        printf("read:%lf[s]\n", 1.0*(end-start)/CLOCKS_PER_SEC);
 
         start = clock();
         qsort(ts, tsIdx, sizeof(TickSeed), tsComp);
@@ -68,7 +68,7 @@ int main(int argc,char *argv[])
         TickSeed* result = (TickSeed*)bsearch((void*)&key, (void*)ts, tsIdx, sizeof(TickSeed), tsComp);
 
         end = clock();
-        printf("探索終了:%lf[s]\n", 1.0*(end-start)/CLOCKS_PER_SEC);
+        printf("search:%lf[s]\n", 1.0*(end-start)/CLOCKS_PER_SEC);
         
         if(result == NULL)
         {
@@ -81,6 +81,7 @@ int main(int argc,char *argv[])
                 {
                         char tmpStr[20];
                         if(result-2+i < ts || ts+tsIdx-1 < result-2+i) continue;
+                        if(key.tick != (result-2+i)->tick) continue;
                         uint32toR17Str((result-2+i)->tick, tmpStr, 6);
                         printf("Result[%d]... %c%c%s:%x\n", i-2, argv[1][0], argv[1][1], tmpStr, (result-2+i)->seed);
                        
