@@ -28,17 +28,13 @@ Creating...1/256
 #0->0, 1->1, ... 10->A, 11->B, ... 15->F, 16->G
 $ ./db-search 0BEEFBAG
 ./db/0B.bin
-読み込み終了:0.484509[s]
-探索終了:2.412460[s]
-Result[-2]... 0BEEFBAF:d7865bfd
+read:0.088954[s]
+search:2.355550[s]
 Result[-1]... 0BEEFBAG:24b9a52e
 Result[0]... 0BEEFBAG:b98ab4f3
-Result[1]... 0BEEFBB1:25341f91
-Result[2]... 0BEEFBB3:12942ccf
 read:14864189
 #<clock hands>:<initial seed>
-#Initial seed of Result[0] or Result[n] that has same clock hands is result.
-#In this case, Result[0]...b98ab4f3 or Result[-1]...24b9a52e is result.
+#In this case, b98ab4f3 or 24b9a52e is result.
 
 #Output list of clock hands(First 15) from an initial seed
 #Input initial seed according to hexadecimal format
