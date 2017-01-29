@@ -62,10 +62,10 @@ http://blastoise-x.hatenablog.com/entry/SM-RNG-abuse
 The Scheme for deciding pokemon status  
 http://xxsakixx.com/archives/55579090.html  
 
-Searching for the initial Seed from clock hands by API
-https://odanpoyo.github.io/2017/01/26/rng-api/
-by local DB 
-https://odanpoyo.github.io/2017/01/25/SFMT-DB/
+Searching for the initial Seed from clock hands by API  
+https://odanpoyo.github.io/2017/01/26/rng-api/  
+by local DB   
+https://odanpoyo.github.io/2017/01/25/SFMT-DB/  
 
 Practical SM RNG Tool (for Egg, Tapu, Silvally, and more)  
 https://github.com/Quandra/PokemonSunMoonRNGTool/tree/v2.00alpha  
