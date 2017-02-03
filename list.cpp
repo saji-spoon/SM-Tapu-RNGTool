@@ -4,7 +4,7 @@ void saveFile(const std::vector<RandData>& rd)
 {
 	std::ofstream ofs("./lists/list.csv");
         
-	ofs << "Consumed, Tick, VPlace, IV, Nature\n";
+	ofs << "Consumed,Tick,VPlace,IV,Nature,Sychro,Blink1,Blink2\n";
 
         for(int i=0; i<rd.size(); ++i)
         {
@@ -46,10 +46,14 @@ std::vector<RandData> getRandDataList(uint32_t seed, int searchN)
         for(int i=0; i<searchN; ++i)
         {
                 uint64_t result = sfmt_genrand_uint64(&sfmt);
+		rd[i].raw = result;
                 rd[i].tick = result % 17;
                 rd[i].vp = result % 6;
                 rd[i].iv = result % 32;
                 rd[i].nature = result % 25;
+		rd[i].synchro = result % 100;
+		rd[i].blink1 = result % 128;
+		rd[i].blink2 = result % 3;
         }
 
 	return rd;

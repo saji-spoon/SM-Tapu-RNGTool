@@ -45,13 +45,21 @@ std::string intToNature(int nature)
 		return "れいせい";
 		case 23:
 		return "しんちょう";
+		case 25:
+		return "シンクロ";
                 default:
                 return "N/A";
         }
 }
 std::ostream& operator<<(std::ostream& ofs, const RandData& rd)
 {
-	ofs << rd.tick << "," << intToVPlace(rd.vp) << "," << rd.iv << "," << intToNature(rd.nature);
+	ofs << rd.tick << "," 
+	<< intToVPlace(rd.vp) << "," 
+	<< rd.iv << "," 
+	<< intToNature(rd.nature) << "," 
+	<< rd.synchro << ","
+	<< rd.blink1 << "," 
+	<< rd.blink2; 
 	return ofs;
 };
 
