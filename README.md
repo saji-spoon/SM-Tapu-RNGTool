@@ -13,41 +13,49 @@ gcc (Ubuntu 4.9.2-10ubuntu13) 4.9.2
 
 ## Usage
 ```
+#Build
 $ make
 
-#Create DB.
-$ ./db-create
+#Create DB
+$./db-create
 Creating...0/256
 Creating...1/256
 .
 .
 .
 
+#Sort DB
+#Execute once. Executing twice or more breaks db files.  
+$./db-sort
+Sorting ./db/00.bin...
+sort:2.513041[s]
+Sorting ./db/01.bin...
+sort:2.450098[s]
+Sorting ./db/02.bin...
+sort:2.369623[s]
+Sorting ./db/03.bin...
+sort:2.321544[s]
+
 #Search the DB
-#Input first 8 clock hands according to heptadecimal format (below)
+#Input first 8 clock hands according to heptadecimal format (below).
 #0->0, 1->1, ... 10->A, 11->B, ... 15->F, 16->G
 $ ./db-search 0BEEFBAG
 ./db/0B.bin
-read:0.088954[s]
-search:2.355550[s]
-Result[-1]... 0BEEFBAG:24b9a52e
-Result[0]... 0BEEFBAG:b98ab4f3
-read:14864189
-#<clock hands>:<initial seed>
-#In this case, b98ab4f3 or 24b9a52e is result.
+readSize:14864189
+read:0.038292[s]
+search:0.000072[s]
 
-#Output list of clock hands(First 15) from an initial seed
-#Input initial seed according to hexadecimal format
-$ ./tickList b98ab4f3
-0BEEFBAG773E77A
-$ ./tickList 24b9a52e
-0BEEFBAG168GA41
+0BEEFBAG16:24b9a52e
+0BEEFBAG77:b98ab4f3
+#<clock hands>:<initial seed>
+#It shows 10 clockhands in result.
 #If you check clock hands 2 more and get 77, the initial seed is b98ab4f3
 
-#Output a list of IVs of pokemon generated from an initial seed.
+#Output a list of IVs of pokemon generated from an initial seed
 $ ./list b98ab4f3
 #/lists/indivList.csv and /lists/list.csv are generated.
 #See indivList.csv for IVs of pokemons generated from the initial seed.
+#Synchro is not implemented now.
 ```
 
 ## Reference
