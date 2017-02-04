@@ -1,10 +1,14 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<time.h>
-#include"SFMT/SFMT.h"
-#include"util.h"
-#include"tickSeed.h"
+#include"util.hpp"
+#include"tickSeed.hpp"
+#include<iostream>
 
+extern "C"
+{
+#include"SFMT/SFMT.h"
+}
 /*
 「検索用バイナリファイル出力」
 起動後（416消費後）の8個の針の並びと初期Seedの組み合わせをファイルへ分割して書き込む。
@@ -29,13 +33,9 @@ int main()
         //針、Seedの組み合わせ保存ファイル
         //fp[x] は ファイルhept(x).bin 例：fp[112]は6A.bin
         FILE* fp[289];
-        char fileID[4]; 
-        char filename[20];
         for(int i=0; i<289; ++i)
         {
-                uint32toR17Str(i, fileID, 2);
-                sprintf(filename, "./db/%s.bin", fileID);                
-                if((fp[i] = fopen(filename, "wb")) == NULL ) 
+                if((fp[i] = fopen(dbFilename(i).c_str(), "wb")) == NULL ) 
                 {
                         perror("file error\n");
                         exit(EXIT_FAILURE);
@@ -100,9 +100,6 @@ int main()
         //ファイルポインタの解放
         for(int i=0; i<289; ++i)
         {
-                //char tmpStr[5];
-                //uint32toR17Str(i, tmpStr, 2);
-                //printf("%s.bin Written:%u\n", tmpStr, fileWCount[i]);
                 fclose(fp[i]);
         }
 

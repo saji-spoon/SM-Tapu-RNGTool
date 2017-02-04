@@ -1,4 +1,4 @@
-#include"tickSeed.h"
+#include"tickSeed.hpp"
 
 int tsComp(const void* e1, const void* e2)
 {

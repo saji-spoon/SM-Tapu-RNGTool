@@ -1,4 +1,4 @@
-#include"util.h"
+#include"util.hpp"
 
 char numtoR17(int x)
 {
@@ -52,23 +52,27 @@ void uint64toHex(uint64_t src, char* dst)
         sprintf(dst, "%08x%08x", x[0], x[1]);
 }
 
-void uint32toR17Str(uint32_t src, char dst[], int digit)
+std::string uint32toHeptStr(uint32_t src, int digit)
 {
-        int i;
-        dst[digit] = '\0';
+	std::string rtnStr = "";
+	
+	int i;
+
         for(i=0; src!=0 && i<digit;++i)
         {
-                dst[digit-1-i] = numtoR17(src % 17);
+                rtnStr = numtoR17(src % 17) + rtnStr;
                 src /= 17;
         }
 
         for( ; i<digit; ++i)
         {
-                dst[digit-1-i] = '0';
+                rtnStr = '0' + rtnStr;
         }
+
+	return rtnStr;
 }
 
-uint32_t r17toNum(char c)
+uint32_t HepttoNum(char c)
 {
 
         if(isdigit(c))
@@ -105,7 +109,7 @@ uint32_t r17toUint32(char src[])
         //1文字ずつuint32_t化
         for(int i=0; i<length; ++i)
         {
-                int num = r17toNum(src[i]);
+                int num = HepttoNum(src[i]);
                 rtnVal += num * rn;
                 rn /= 17;
         }
@@ -114,3 +118,10 @@ uint32_t r17toUint32(char src[])
 
 }
 
+std::string dbFilename(int num)
+{	
+                const std::string fileID = uint32toHeptStr(num, 2);
+		const std::string filename = "./db/" + fileID + ".bin";
+
+		return filename;
+}
