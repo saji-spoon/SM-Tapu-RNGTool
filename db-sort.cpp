@@ -18,7 +18,7 @@ off_t fileSize(char* filename)
 
 int main(int argc,char *argv[])
 {       
-	for (int i=11; i<13; ++i)
+	for (int i=0; i<289; ++i)
 	{
 		FILE* frp;
 		std::string filename = dbFilename(i);
@@ -26,7 +26,7 @@ int main(int argc,char *argv[])
 		if(frp == NULL) 
 		{
 			perror("file error(frp)");
-			exit(EXIT_FAILURE);
+			continue;
 		}
 		std::cout << "Sorting " << filename << "...\n";
 
