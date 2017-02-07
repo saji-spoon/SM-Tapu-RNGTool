@@ -1,7 +1,7 @@
 CC := gcc
 CXX := g++
 CFLAGS := -O3 -std=c11
-CXXFLAGS := -O3 -std=c++11
+CXXFLAGS := -O3 -std=c++11 
 SFMT_USE := -msse2 -fno-strict-aliasing -DSFMT_MEXP=19937 -DHAVE_SSE2=1 -I./SFMT
 
 COMPILE :=$(CC) $(CFLAGS) -c
@@ -17,8 +17,8 @@ test-tick10:test-tick10.o
 db-search:db-search.o
 	$(CXX) $^ -o $@
 
-db-create:db-create.o
-	$(CXX) $^ -o $@
+db-create:db-create-entry.o
+	$(CXX) $^ -pthread -o $@
 
 db-sort:db-sort.o
 	$(CXX) $^ -o $@
@@ -44,6 +44,8 @@ list:list.o RNGData.o
 
 db-search:SFMTUtil.o SFMT.o util.o
 
+db-create:db-create.o 
+
 #Header file
 util.o:util.hpp
 
@@ -53,7 +55,9 @@ SFMT.o:SFMT/SFMT.h
 
 RNGData.o:RNGData.hpp
 
-list.o:list.hpp
+list.o list-entry.o:list.hpp
+
+db-create.o db-create-entry.o:db-create.hpp
 
 SFMTUtil.o:SFMTUtil.hpp
 

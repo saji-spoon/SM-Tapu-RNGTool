@@ -1,32 +1,21 @@
-#include<stdio.h>
-#include<stdlib.h>
-#include<time.h>
-#include"util.hpp"
-#include"tickSeed.hpp"
-#include<iostream>
+#include"db-create.hpp"
+#include<errno.h>
 
-extern "C"
+void DBCreater::operator()()
 {
-#include"SFMT/SFMT.h"
-}
-/*
-「検索用バイナリファイル出力」
-起動後（416消費後）の8個の針の並びと初期Seedの組み合わせをファイルへ分割して書き込む。
-針の並びの最初の2個がXXとなる針,初期SeedペアはXX.binというファイルに保存される。
-残りの針の並び6個を17進数と見て32bit符号なし整数型にエンコードしTickSeed構造体にSeedとのペアで格納、バイナリファイルとして書き込む。
-例：(針、Seed)=(0BEEFBAG, 0xB98AB4F3)について、TickSeed構造体に(tick=21124352, seed=3112875251)として格納し0B.binへバイナリで書き込み
-全ファイル書き込み終了後、各ファイルに書き込まれたTickSeed構造体の数を標準出力へ出力する
-*/
+	//create db
+	//update m_progress, m_state
+	
+	setState(Processing);
 
-int main()
-{
         sfmt_t sfmt;
+
         const uint32_t SEEK_START = 0x00000000;         //出力開始Seed
         const uint32_t SEEK_MAX = 0xFFFFFFFFU;          //出力最大seed 
         uint32_t seed;
         
         //進捗表示用
-        const uint32_t split = 256U;
+        const uint32_t split = 0xFFFFU;
         const uint32_t unit = (SEEK_MAX - SEEK_START)/split;
         int per = 0;
         
@@ -37,8 +26,9 @@ int main()
         {
                 if((fp[i] = fopen(dbFilename(i).c_str(), "wb")) == NULL ) 
                 {
-                        perror("file error\n");
-                        exit(EXIT_FAILURE);
+                        m_errStr = strerror(errno);
+			setState(Error);
+			return;
                 }
                 
         }
@@ -51,7 +41,8 @@ int main()
                 //進捗表示用
                 if(seed % unit==0)
                 {
-                        printf("Creating...%d/%d\n", per, split);
+			setProgress(100.0*per/split);
+                        //printf("Creating...%d/%d\n", per, split);
                         ++per;
                 }
 
@@ -103,5 +94,5 @@ int main()
                 fclose(fp[i]);
         }
 
-        return 0;
+	setState(Finished);
 }
