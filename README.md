@@ -18,8 +18,9 @@ $ make
 
 #Create DB
 $./db-create
-Creating...0/256
-Creating...1/256
+0.01 %
+0.02 %
+0.03 %
 .
 .
 .
@@ -27,14 +28,15 @@ Creating...1/256
 #Sort DB
 #Execute once. Executing twice or more breaks db files.  
 $./db-sort
-Sorting ./db/00.bin...
-sort:2.513041[s]
-Sorting ./db/01.bin...
-sort:2.450098[s]
-Sorting ./db/02.bin...
-sort:2.369623[s]
-Sorting ./db/03.bin...
-sort:2.321544[s]
+0.00 %
+0.00 %
+3.46 %
+3.46 %
+3.81 %
+4.15 %
+.
+.
+.
 
 #Search the DB
 #Input first 8 clock hands according to heptadecimal format (below).
@@ -49,7 +51,7 @@ search:0.000072[s]
 0BEEFBAG77:b98ab4f3
 #<clock hands>:<initial seed>
 #It shows 10 clockhands in result.
-#If you check clock hands 2 more and get 77, the initial seed is b98ab4f3
+#In this case, if you check clock hands 2 more and get 77, the initial seed is b98ab4f3
 
 #Output a list of IVs of pokemon generated from an initial seed
 $ ./list b98ab4f3
