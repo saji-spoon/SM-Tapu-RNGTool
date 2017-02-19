@@ -6,7 +6,7 @@ void saveFile(const std::vector<RandData>& rd)
         
 	ofs << "Consumed,Tick,VPlace,IV,Nature,Sychro,Blink1,Blink2\n";
 
-        for(int i=0; i<rd.size(); ++i)
+        for(size_t i=0; i<rd.size(); ++i)
         {
 		ofs << i << "," << rd[i] << "\n";
         }
@@ -19,7 +19,7 @@ void saveFile(const std::vector<PokeStatus>& pkst)
 	
 	ofs << "Consumed,H,A,B,C,D,S,Nature\n";
 
-	for (int i=0; i<pkst.size(); ++i)
+	for (size_t i=0; i<pkst.size(); ++i)
 	{
 		ofs << i << "," << pkst[i] << "\n";
 	}

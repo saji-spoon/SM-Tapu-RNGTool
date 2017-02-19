@@ -102,12 +102,12 @@ uint32_t r17toUint32(char src[])
 
         uint32_t rtnVal = 0;
         uint32_t rn = 1; //for base=17, digit=length calcuration
-        for(int i=0; i<length-1; ++i)
+        for(size_t i=0; i<length-1; ++i)
         {
                 rn *= 17;
         }
         //1文字ずつuint32_t化
-        for(int i=0; i<length; ++i)
+        for(size_t i=0; i<length; ++i)
         {
                 int num = HepttoNum(src[i]);
                 rtnVal += num * rn;
@@ -125,3 +125,11 @@ std::string dbFilename(int num)
 
 		return filename;
 }
+
+off_t fileSize(const char* filename)
+{
+        struct stat st;
+        stat(filename, &st);
+        return st.st_size;
+}
+

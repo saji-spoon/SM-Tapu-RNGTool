@@ -1,75 +1,56 @@
-#include<stdio.h>
-#include<stdlib.h>
-#include<time.h>
-#include <sys/stat.h>
-#include <unistd.h>
-#include <fcntl.h>
-#include<string>
-#include<iostream>
-#include"util.hpp"
-#include"tickSeed.hpp"
+#include"db-sort.hpp"
 
-off_t fileSize(char* filename)
-{
-        struct stat st;
-        stat(filename, &st);
-        return st.st_size;
-}
 
-int main(int argc,char *argv[])
+void DBSort::operator()()
 {       
+	m_state = Processing;
+	bool hasError = false;
 	for (int i=0; i<289; ++i)
 	{
-		FILE* frp;
+		m_progress = 1.0*i/289.0;
+
 		std::string filename = dbFilename(i);
-		frp = fopen(filename.c_str(), "rb");
-		if(frp == NULL) 
+		std::unique_ptr<FILE, decltype(&fclose)> frp(fopen(filename.c_str(), "rb"), fclose);
+		if(!frp) 
 		{
-			perror("file error(frp)");
+			hasError = true;
 			continue;
 		}
-		std::cout << "Sorting " << filename << "...\n";
+		
 
 		char tmpFilename[30];
 		strncpy(tmpFilename, filename.c_str(), 29);
 		off_t size = fileSize(tmpFilename) / sizeof(TickSeed);
 
 		//針、Seedの組み合わせ
-		TickSeed* ts = (TickSeed*)malloc(sizeof(TickSeed)*size);
+		std::unique_ptr<TickSeed, decltype(&free)> ts((TickSeed*)malloc(sizeof(TickSeed)*size), free);
 		uint32_t tsIdx = 0;
 
-		//計測
-		clock_t start = clock();
 
-		tsIdx = fread((void*)ts, sizeof(TickSeed), size, frp);
+		tsIdx = fread((void*)ts.get(), sizeof(TickSeed), size, frp.get());
 		      
-		qsort(ts, tsIdx, sizeof(TickSeed), tsComp);
+		qsort(ts.get(), tsIdx, sizeof(TickSeed), tsComp);
 		
-		clock_t end = clock();
+		//close file
+		frp.reset();
 		
-		printf("sort:%lf[s]\n", 1.0*(end-start)/CLOCKS_PER_SEC);
-		
-		fclose(frp);
-		
-		FILE* fwp;
-		fwp = fopen(filename.c_str(), "wb");
-		if(fwp == NULL) 
+		std::unique_ptr<FILE, decltype(&fclose)> fwp(fopen(filename.c_str(), "wb"), fclose);
+		if(!fwp) 
 		{
-			perror("file error(fwp)");
-			exit(EXIT_FAILURE);
+			hasError = true;
+			continue;
 		}
 
-		for (int i=0; i<tsIdx; ++i)
+		for (size_t i=0; i<tsIdx; ++i)
 		{
-			fwrite(&(ts[i].seed), sizeof(uint32_t), 1, fwp); 
+			fwrite(&(ts.get()[i].seed), sizeof(uint32_t), 1, fwp.get()); 
 		}
 		
 
-		fclose(fwp);
-		free(ts);
 	}
+	m_state = (hasError ? Error : Finished);
 
 
-        return 0;
 }
+
 

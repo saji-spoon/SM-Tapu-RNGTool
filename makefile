@@ -1,7 +1,7 @@
 CC := gcc
 CXX := g++
 CFLAGS := -O3 -std=c11
-CXXFLAGS := -O3 -std=c++11 
+CXXFLAGS := -O3 -std=c++11 -Wall 
 SFMT_USE := -msse2 -fno-strict-aliasing -DSFMT_MEXP=19937 -DHAVE_SSE2=1 -I./SFMT
 
 COMPILE :=$(CC) $(CFLAGS) -c
@@ -17,11 +17,11 @@ test-tick10:test-tick10.o
 db-search:db-search.o
 	$(CXX) $^ -o $@
 
-db-create:db-create-entry.o
+db-create:db-create-entry.o db-create.o
 	$(CXX) $^ -pthread -o $@
 
-db-sort:db-sort.o
-	$(CXX) $^ -o $@
+db-sort:db-sort-entry.o db-sort.o
+	$(CXX) $^ -pthread -o $@
 
 tickList:tickList.o
 	$(CXX) $^ -o $@
@@ -30,8 +30,8 @@ list:list-entry.o
 	$(CXX) $^ -o $@
 
 #Test Target
-test:test.o list.o RNGData.o SFMT.o
-	$(CXX) $^  -o $@
+test:test.o db-create.o tickSeed.o util.o SFMT.o 
+	$(CXX) $^ -pthread -o  $@
 
 #Who use util/tickSeed/SFMT
 db-create db-sort db-search: tickSeed.o
@@ -44,8 +44,6 @@ list:list.o RNGData.o
 
 db-search:SFMTUtil.o SFMT.o util.o
 
-db-create:db-create.o 
-
 #Header file
 util.o:util.hpp
 
@@ -57,7 +55,9 @@ RNGData.o:RNGData.hpp
 
 list.o list-entry.o:list.hpp
 
-db-create.o db-create-entry.o:db-create.hpp
+db-create.o db-create-entry.o:db-create.hpp threadSafeWorker.hpp
+
+db-sort.o db-sort-entry.o:db-sort.hpp threadSafeWorker.hpp
 
 SFMTUtil.o:SFMTUtil.hpp
 

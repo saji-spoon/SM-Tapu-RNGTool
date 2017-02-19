@@ -1,33 +1,12 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<time.h>
-#include <sys/stat.h>
-#include <unistd.h>
-#include <fcntl.h>
 #include<string>
 #include<algorithm>
+#include<memory>
 #include"util.hpp"
 #include"SFMTUtil.hpp"
 #include"tickSeed.hpp"
-
-off_t fileSize(char* filename)
-{
-        struct stat st;
-        stat(filename, &st);
-        return st.st_size;
-}
-
-struct TickEncode
-{
-	TickEncode()
-	{}
-
-	TickEncode(uint32_t v)
-	:val(v)
-	{
-	}
-	uint32_t val;
-};
 
 int main(int argc,char *argv[])
 {       
@@ -52,30 +31,27 @@ int main(int argc,char *argv[])
 
 	std::cout << filename << "\n";
 
-        FILE* fp;
-        fp = fopen(filename.c_str(), "rb");
-        if(fp == NULL) 
+        std::unique_ptr<FILE, decltype(&fclose)> fp(fopen(filename.c_str(), "rb"), fclose);
+        if(!fp) 
         {
 		perror("file error(fp)");
 		exit(EXIT_FAILURE);
 	}
         
-	char tmpFilename[30];
-	strncpy(tmpFilename, filename.c_str(), 29);
-        off_t size = fileSize(tmpFilename) / sizeof(uint32_t);
+        off_t size = fileSize(filename.c_str()) / sizeof(uint32_t);
 
         //seedのみファイルから読み込む
-        uint32_t* sds = (uint32_t*)malloc(sizeof(uint32_t)*size);
+        std::unique_ptr<uint32_t, decltype(&free)> sds((uint32_t*)malloc(sizeof(uint32_t)*size), free); 
         uint32_t readSize = 0;
 
         //計測
         clock_t start = clock();
 
-        readSize = fread((void*)sds, sizeof(uint32_t), size, fp); 
+        readSize = fread((void*)sds.get(), sizeof(uint32_t), size, fp.get()); 
 
 	std::cout << "readSize:" << readSize <<"\n";
 
-	std::vector<uint32_t> seeds(sds, sds+readSize);
+	std::vector<uint32_t> seeds(sds.get(), sds.get()+readSize);
  
 	clock_t end = clock();
 
@@ -83,26 +59,18 @@ int main(int argc,char *argv[])
 
         start = clock();
         
-        uint32_t key;
-	std::vector<uint64_t> keyTick;
-	for (int i=0; i<8; ++i)
-	{
-		keyTick.push_back(ticks[i]);
-	}	
+	std::vector<uint64_t> first8Ticks;
+	
+	std::copy(ticks.begin(), ticks.begin()+8, std::back_inserter(first8Ticks));
 
-        key = tickToTickkey(keyTick);
+        uint32_t key = tickToTickkey(first8Ticks);
 
-        uint32_t* result = NULL;//(uint32_t*)bsearch((void*)&key, (void*)seeds, readSize, sizeof(uint32_t), seedComp);
-
-	//auto findit = std::find_if(seeds.begin(), seeds.end(), [&key](const uint32_t& e){return seedToTickkey(e)==key;});
-	//std::cout << "compare:" << seedToTickkey(*findit) << " " << key << "\n";
-
+	//search for seed matches input clockhands as key 
 	auto it = std::lower_bound(seeds.begin(), seeds.end(), key, [](const uint32_t e, const uint32_t val){return seedToTickkey(e)<val;});
+	bool found = (seedToTickkey(*it)==key);
 	
         end = clock();
         printf("search:%lf[s]\n\n", 1.0*(end-start)/CLOCKS_PER_SEC);
-
-	bool found = (seedToTickkey(*it)==key);
 
         if(!found)
         {
@@ -118,7 +86,6 @@ int main(int argc,char *argv[])
 		}
         }
 
-        //printf("read:%u\n", tsIdx);
         return 0;
 }
 

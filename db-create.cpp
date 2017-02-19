@@ -1,13 +1,30 @@
 #include"db-create.hpp"
-#include<errno.h>
 
-void DBCreater::operator()()
+void DBCreator::operator()()
 {
-	//create db
-	//update m_progress, m_state
-	
-	setState(Processing);
+	try
+	{	
+	m_state = Processing;
 
+	create();
+
+	if(m_state==Error)
+	{
+		//If create() made Error, finish thread under (m_state == Error);
+		return;
+	}
+
+	m_state = Finished;
+	}
+	catch(Thread_aborted& e)
+	{
+		m_state = Error;
+		setErrString(std::string("Aborted."));
+	}
+}
+
+void DBCreator::create()
+{
         sfmt_t sfmt;
 
         const uint32_t SEEK_START = 0x00000000;         //出力開始Seed
@@ -19,17 +36,23 @@ void DBCreater::operator()()
         const uint32_t unit = (SEEK_MAX - SEEK_START)/split;
         int per = 0;
         
-        //針、Seedの組み合わせ保存ファイル
-        //fp[x] は ファイルhept(x).bin 例：fp[112]は6A.bin
-        FILE* fp[289];
+        //針、Seedの組み合わせ保存ファイル(db-sortでソートの後、seedのみ保存することを想定)
+        //fps[x] は ファイルhept(x).bin 例：fps[112]は6A.bin
+
+	std::vector<std::unique_ptr<FILE, decltype(&fclose)>> fps;
         for(int i=0; i<289; ++i)
         {
-                if((fp[i] = fopen(dbFilename(i).c_str(), "wb")) == NULL ) 
+		FILE* tmpFp = fopen(dbFilename(i).c_str(), "wb");		
+                if(tmpFp == NULL) 
                 {
-                        m_errStr = strerror(errno);
-			setState(Error);
+                        setErrString(strerror(errno));
+			m_state = Error;
 			return;
                 }
+		else
+		{
+			fps.push_back(std::unique_ptr<FILE, decltype(&fclose)>(tmpFp, fclose));
+		}
                 
         }
 
@@ -41,10 +64,15 @@ void DBCreater::operator()()
                 //進捗表示用
                 if(seed % unit==0)
                 {
-			setProgress(100.0*per/split);
+			//進捗を更新
+			m_progress = 1.0*per/split;
                         //printf("Creating...%d/%d\n", per, split);
                         ++per;
-                }
+                
+			//Abortのチェック・発動
+			check_abort();	
+		}
+		
 
                 sfmt_init_gen_rand(&sfmt, seed);
 
@@ -81,18 +109,23 @@ void DBCreater::operator()()
                 tmpTs.seed = seed;
                 
                 //ファイルにTickSeed構造体1つ書き込み
-                const int fileOK = fwrite((void*)&tmpTs, sizeof(TickSeed), 1, fp[fileIdx]); 
+                const int fileOK = fwrite((void*)&tmpTs, sizeof(TickSeed), 1, fps[fileIdx].get()); 
                 if(fileOK != 1) printf("fileWrite failed... %d\n", fileIdx);
                 fileWCount[fileIdx] += fileOK;
 
                 if(seed == SEEK_MAX) break;
         }
+}
 
-        //ファイルポインタの解放
-        for(int i=0; i<289; ++i)
-        {
-                fclose(fp[i]);
-        }
+void DBCreator::abort()
+{
+	m_abortFlag = true;
+}
 
-	setState(Finished);
+void DBCreator::check_abort()
+{
+	if(m_abortFlag)
+	{
+		throw Thread_aborted();
+	}
 }

@@ -14,7 +14,7 @@ int main()
 {
 	try
 	{
-	DBCreater dbc;
+	DBCreator dbc;
 	std::thread th(std::ref(dbc));
 
 	th.detach();
@@ -22,15 +22,15 @@ int main()
 	{
 		sleep(1);
 		
-		printf("%.2lf %%\n", dbc.getProgress());
+		printf("%.2lf %%\n", 100.0*dbc.getProgress());
 
-		if(dbc.getState()==DBCreater::Finished) 
+		if(dbc.getState()==DBCreator::Finished) 
 		{
 			break;
 		}
-		else if(dbc.getState()==DBCreater::Error)
+		else if(dbc.getState()==DBCreator::Error)
 		{
-			std::cout << "Error:" << dbc.m_errStr << "\n";
+			std::cout << "Error:" << dbc.getErrString() << "\n";
 			break;
 		}
 	}

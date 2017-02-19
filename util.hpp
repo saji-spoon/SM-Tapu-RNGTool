@@ -5,6 +5,9 @@
 #include<ctype.h>
 #include<string>
 #include<vector>
+#include <sys/stat.h>
+#include <unistd.h>
+#include <fcntl.h>
 
 char numtoR17(int x);
 
@@ -18,4 +21,5 @@ uint32_t r17toUint32(char src[]);
 
 std::string dbFilename(int num);
 
+off_t fileSize(const char* filename);
 
