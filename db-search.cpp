@@ -42,12 +42,15 @@ int main(int argc,char *argv[])
 
         //seedのみファイルから読み込む
         std::unique_ptr<uint32_t, decltype(&free)> sds((uint32_t*)malloc(sizeof(uint32_t)*size), free); 
-        uint32_t readSize = 0;
-
+        if(!sds) 
+        {
+		perror("memory error(sds)");
+		exit(EXIT_FAILURE);
+	}
         //計測
         clock_t start = clock();
 
-        readSize = fread((void*)sds.get(), sizeof(uint32_t), size, fp.get()); 
+        uint32_t readSize = fread((void*)sds.get(), sizeof(uint32_t), size, fp.get()); 
 
 	std::cout << "readSize:" << readSize <<"\n";
 
