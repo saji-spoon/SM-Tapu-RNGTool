@@ -9,7 +9,7 @@ COMPILE_CXX :=$(CXX) $(CXXFLAGS) -c
 SFMT_USE_COMPILE :=$(CC) $(CFLAGS) $(SFMT_USE) -c
 SFMT_USE_COMPILE_CXX := $(CXX) $(CXXFLAGS) $(SFMT_USE) -c 
 
-default:db-search db-create  list
+default:db-search db-create db-sort  list
 
 #Target list
 test-tick10:test-tick10.o

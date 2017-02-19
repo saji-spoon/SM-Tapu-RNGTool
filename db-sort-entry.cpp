@@ -26,6 +26,8 @@ int main()
 			std::cout << "Error:" << "\n";
 			break;
 		}
+
+		sleep(1);
 	}
 
 
