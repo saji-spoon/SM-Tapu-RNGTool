@@ -43,6 +43,17 @@ char numtoR17(int x)
         }
 }
 
+std::string uint64toHex(uint64_t src)
+{
+    uint32_t x[2];
+    x[0] = src >> 32;
+    x[1] = 0xFFFFFFFFLL & src;
+
+    return "";
+    //sprintf(dst, "%08x%08x", x[0], x[1]);
+}
+
+/*
 void uint64toHex(uint64_t src, char* dst)
 {
         uint32_t x[2];
@@ -51,6 +62,7 @@ void uint64toHex(uint64_t src, char* dst)
 
         sprintf(dst, "%08x%08x", x[0], x[1]);
 }
+*/
 
 std::string uint32toHeptStr(uint32_t src, int digit)
 {

@@ -1,4 +1,5 @@
 #include"db-create.hpp"
+#pragma warning(disable : 4996)
 
 void DBCreator::operator()()
 {
@@ -97,8 +98,6 @@ void DBCreator::create()
                 for(int i=0; i<6; ++i)
                 {
                         uint64_t result = sfmt_genrand_uint64(&sfmt);
-                        //uint64toHex(result, str);
-                        //printf("%s", inttoR17(result%17));
                         tmp6TickToUint32 += result % 17 * rn;
                         rn /= 17;
                 }

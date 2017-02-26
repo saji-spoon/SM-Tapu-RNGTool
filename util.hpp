@@ -6,12 +6,12 @@
 #include<string>
 #include<vector>
 #include <sys/stat.h>
-#include <unistd.h>
+//#include <unistd.h>
 #include <fcntl.h>
 
 char numtoR17(int x);
 
-void uint64toHex(uint64_t src, char* dst);
+std::string uint64toHex(uint64_t src);
 
 std::string uint32toHeptStr(uint32_t src, int digit);
 
