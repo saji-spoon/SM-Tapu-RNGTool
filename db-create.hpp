@@ -27,6 +27,11 @@ public:
 
 	void abort();
 
+    bool isAborted() 
+    {
+        return m_state == Error && m_abortFlag;
+    }
+
 	std::string getErrString()
 	{
 		std::lock_guard<std::recursive_mutex> lock(m_mutex);
