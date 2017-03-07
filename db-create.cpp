@@ -1,4 +1,4 @@
-#include"db-create.hpp"
+﻿#include"db-create.hpp"
 #pragma warning(disable : 4996)
 
 void DBCreator::operator()()
@@ -14,13 +14,16 @@ void DBCreator::operator()()
 		//If create() made Error, finish thread under (m_state == Error);
 		return;
 	}
+    else
+    {
+        m_state = Finished;
+    }
 
-	m_state = Finished;
 	}
 	catch(Thread_aborted& e)
 	{
-		m_state = Error;
-		setErrString(std::string("Aborted."));
+        setErrString(std::string("Aborted."));
+        m_state = Error;
 	}
 }
 
@@ -40,15 +43,15 @@ void DBCreator::create()
         //針、Seedの組み合わせ保存ファイル(db-sortでソートの後、seedのみ保存することを想定)
         //fps[x] は ファイルhept(x).bin 例：fps[112]は6A.bin
 
-	std::vector<std::unique_ptr<FILE, decltype(&fclose)>> fps;
+	    std::vector<std::unique_ptr<FILE, decltype(&fclose)>> fps;
         for(int i=0; i<289; ++i)
         {
-		FILE* tmpFp = fopen(dbFilename(i).c_str(), "wb");		
+		        FILE* tmpFp = fopen(dbFilename(i).c_str(), "wb");		
                 if(tmpFp == NULL) 
                 {
                         setErrString(strerror(errno));
-			m_state = Error;
-			return;
+			            m_state = Error;
+			            return;
                 }
 		else
 		{
@@ -108,7 +111,7 @@ void DBCreator::create()
                 tmpTs.seed = seed;
                 
                 //ファイルにTickSeed構造体1つ書き込み
-                const int fileOK = fwrite((void*)&tmpTs, sizeof(TickSeed), 1, fps[fileIdx].get()); 
+                const size_t fileOK = fwrite((void*)&tmpTs, sizeof(TickSeed), 1, fps[fileIdx].get()); 
                 if(fileOK != 1) printf("fileWrite failed... %d\n", fileIdx);
                 fileWCount[fileIdx] += fileOK;
 

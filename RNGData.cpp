@@ -1,4 +1,4 @@
-#include"RNGData.hpp"
+﻿#include"RNGData.hpp"
 
 char intToVPlace(int vp)
 {

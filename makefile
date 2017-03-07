@@ -1,4 +1,4 @@
-CC := gcc
+﻿CC := gcc
 CXX := g++
 CFLAGS := -O3 -std=c11
 CXXFLAGS := -O3 -std=c++11 -Wall 

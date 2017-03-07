@@ -1,4 +1,5 @@
-#pragma once
+﻿#pragma once
+#include<iostream>
 #include<time.h>
 #include<atomic>
 #include<mutex>
@@ -12,14 +13,14 @@ extern "C"
 #include"SFMT/SFMT.h"
 }
 
-#include"threadSafeWorker.hpp"
+#include"ThreadSafeWorker.hpp"
 
 
-class DBCreator : public threadSafeWorker
+class DBCreator : public ThreadSafeWorker
 {
 public:
 	DBCreator()
-	:threadSafeWorker(), m_errStr("o"), m_abortFlag(false) 
+	:ThreadSafeWorker(), m_errStr("o"), m_abortFlag(false) 
 	{
 	}
 
@@ -45,6 +46,25 @@ public:
 		m_errStr = str;
 		
 	}
+
+    //m_mutex is not moved
+    DBCreator(DBCreator && rv) noexcept 
+    {
+        *this = std::move(rv);
+    }
+
+    DBCreator& operator=(DBCreator&& rv) noexcept
+    {
+        if (this != &rv) 
+        {
+            m_errStr = std::move(rv.m_errStr);
+            m_abortFlag = rv.m_abortFlag.load();
+            ThreadSafeWorker::operator=(std::move(rv));
+
+        }
+
+        return *this;
+    }
 
 
 

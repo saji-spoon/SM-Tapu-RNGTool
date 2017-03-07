@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 //#include<unistd.h>
 #include<atomic>
 extern "C"
@@ -6,7 +6,7 @@ extern "C"
 #include"SFMT/SFMT.h"
 }
 
-class threadSafeWorker 
+class ThreadSafeWorker 
 {
 public:
 	enum State
@@ -17,7 +17,7 @@ public:
 		Error
 	};
 
-	threadSafeWorker()
+	ThreadSafeWorker()
 	:m_progress(0.0), m_state(None) 
 	{}
 
@@ -32,6 +32,24 @@ public:
 	{
 		return m_state;
 	}
+
+    ThreadSafeWorker(ThreadSafeWorker&& rv) noexcept
+    {
+        *this = std::move(rv);
+    }
+
+    ThreadSafeWorker& operator=(ThreadSafeWorker&& rv) 
+    {
+        if (this != &rv)
+        {
+            m_progress = rv.m_progress.load();
+            m_state = rv.m_state.load();
+        }
+
+        return *this;
+    }
+
+
 
 protected:
 	std::atomic<double> m_progress;

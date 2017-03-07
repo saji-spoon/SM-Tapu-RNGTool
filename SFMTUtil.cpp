@@ -1,4 +1,4 @@
-#include"SFMTUtil.hpp"
+﻿#include"SFMTUtil.hpp"
 
 std::vector<uint64_t> seedToTick(uint32_t seed, int num)
 {

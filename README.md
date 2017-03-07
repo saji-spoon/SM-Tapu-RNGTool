@@ -1,4 +1,4 @@
-SM-Tapu-RNGTool
+﻿SM-Tapu-RNGTool
 ====
 Creates and searchs the DB for specifying initial seed from first 8 clock hands.   
 Outputs a list of IVs of pokemon generated from an initial seed.  

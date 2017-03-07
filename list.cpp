@@ -1,4 +1,4 @@
-#include"list.hpp"
+﻿#include"list.hpp"
 
 void saveFile(const std::vector<RandData>& rd)
 {
