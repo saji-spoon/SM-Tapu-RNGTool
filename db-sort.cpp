@@ -19,7 +19,7 @@ void DBSort::operator()()
 		
 
 		char tmpFilename[30];
-		strncpy(tmpFilename, filename.c_str(), 29);
+		strncpy_s(tmpFilename, filename.c_str(), 29);
 		off_t size = fileSize(tmpFilename) / sizeof(TickSeed);
 
 		//針、Seedの組み合わせ

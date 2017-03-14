@@ -3,7 +3,6 @@
 #include<stdlib.h>
 #include<time.h>
 #include<sys/stat.h>
-#include<unistd.h>
 #include<fcntl.h>
 #include<errno.h>
 #include<string>
@@ -13,10 +12,10 @@
 #include"tickSeed.hpp"
 #include"threadSafeWorker.hpp"
 
-class DBSort : public threadSafeWorker
+class DBSort : public ThreadSafeWorker
 {
 public:
-	DBSort():threadSafeWorker()
+	DBSort():ThreadSafeWorker()
 	{
 	}
 
