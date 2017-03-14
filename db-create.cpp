@@ -60,9 +60,6 @@ void DBCreator::create()
                 
         }
 
-        //fileごとに書き込んだ要素数をカウント
-        uint32_t fileWCount[289] = {0U};
-
         for(seed = SEEK_START; ; ++seed)
         {
                 //進捗表示用
@@ -113,7 +110,6 @@ void DBCreator::create()
                 //ファイルにTickSeed構造体1つ書き込み
                 const size_t fileOK = fwrite((void*)&tmpTs, sizeof(TickSeed), 1, fps[fileIdx].get()); 
                 if(fileOK != 1) printf("fileWrite failed... %d\n", fileIdx);
-                fileWCount[fileIdx] += fileOK;
 
                 if(seed == SEEK_MAX) break;
         }
